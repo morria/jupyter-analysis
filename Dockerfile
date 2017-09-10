@@ -1,6 +1,11 @@
 FROM jupyter/all-spark-notebook
 MAINTAINER Andrew S. Morrison "asm@collapse.io"
 
+# Similar work here:
+# https://github.com/boechat107/ext-spark-notebook/blob/master/Dockerfile#L34
+#
+# Discussion of SPARK_OPTS:
+# https://github.com/jupyter/docker-stacks/issues/169
 
 # Set up the environment
 USER root
@@ -44,12 +49,11 @@ ADD http://www-us.apache.org/dist/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin
 RUN tar -zxf apache-opennlp-1.5.3-bin.tar.gz ;\
     cd apache-opennlp-1.5.3; \
     cp lib/*.jar /usr/local/share/java/; \
-    cp lib/*.jar /usr/share/java/; \
     cp lib/opennlp-tools-1.5.3.jar /usr/local/share/java/opennlp-tools-1.5.0.jar; \
     cd .. ; rm -rf apache-opennlp*
 USER $NB_USER
-ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/opennlp-tools-1.5.3.jar
-ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/opennlp-tools-1.5.3.jar
+ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/opennlp-maxent-3.0.3.jar,/usr/local/share/java/opennlp-tools-1.5.3.jar,/usr/local/share/java/opennlp-uima-1.5.3.jar
+ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/opennlp-maxent-3.0.3.jar:/usr/local/share/java/opennlp-tools-1.5.3.jar:/usr/local/share/java/opennlp-uima-1.5.3.jar
 
 # Scala
 # RUN curl -O https://oss.sonatype.org/content/repositories/snapshots/sh/jove/jove-scala-cli_2.11/0.1.1-1-SNAPSHOT/jove-scala-cli_2.11-0.1.1-1-SNAPSHOT.tar.gz
