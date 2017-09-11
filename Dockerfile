@@ -11,7 +11,7 @@ MAINTAINER Andrew S. Morrison "asm@collapse.io"
 USER root
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update; apt-get -y upgrade; apt-get -y autoclean
-RUN apt-get -y install git
+RUN apt-get -y install git curl
 RUN mkdir -p /usr/local/share/java
 WORKDIR /tmp/
 USER $NB_USER
@@ -56,10 +56,23 @@ ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/opennlp-maxent-3.0.3.
 ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/opennlp-maxent-3.0.3.jar:/usr/local/share/java/opennlp-tools-1.5.3.jar:/usr/local/share/java/opennlp-uima-1.5.3.jar
 
 # Scala
-# RUN curl -O https://oss.sonatype.org/content/repositories/snapshots/sh/jove/jove-scala-cli_2.11/0.1.1-1-SNAPSHOT/jove-scala-cli_2.11-0.1.1-1-SNAPSHOT.tar.gz
-# RUN tar xzf jove-scala-cli_2.11-0.1.1-1-SNAPSHOT.tar.gz
-# RUN cd jove-scala-cli-0.1.1-1-SNAPSHOT/; \
-#     ./bin/jove-scala --kernel-spec;
+USER $NB_USER
+RUN curl -O https://raw.githubusercontent.com/alexarchambault/jupyter-scala/master/jupyter-scala
+RUN chmod +x ./jupyter-scala
+RUN ./jupyter-scala
+USER $NB_USER
+
+# PHP
+# USER root
+# RUN apt-get -y install php7.0 php7.0-cli php7.0-common php7.0-curl php7.0-opcache
+# RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+# RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+# RUN php composer-setup.php
+# RUN php -r "unlink('composer-setup.php');"
+# RUN mv composer.phar /usr/local/bin/composer
+# RUN curl -O https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar
+# RUN php ./jupyter-php-installer.phar install
+# USER $NB_USER
 
 ENV TOREE_OPTS $TOREE_OPTS --jars $SPARK_OPTS_JARS
 ENV SPARK_OPTS $SPARK_OPTS --jars $SPARK_OPTS_JARS
