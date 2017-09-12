@@ -74,6 +74,15 @@ USER $NB_USER
 # RUN php ./jupyter-php-installer.phar install
 # USER $NB_USER
 
+
+# Tensor Flow
+USER root
+RUN yes y | conda create -n tensorflow
+RUN /bin/bash -c "source activate tensorflow"
+RUN pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl
+USER $NB_USER
+
+
 ENV TOREE_OPTS $TOREE_OPTS --jars $SPARK_OPTS_JARS
 ENV SPARK_OPTS $SPARK_OPTS --jars $SPARK_OPTS_JARS
 
