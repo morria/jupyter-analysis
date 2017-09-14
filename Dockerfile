@@ -56,7 +56,7 @@ USER $NB_USER
 RUN pip install --upgrade pandas
 
 # Matplotlib
-COPY content/matplotlib.stylelib/asm.mplstyle /home/jovyan/.config/matplotlib/stylelib
+COPY content/matplotlib.stylelib/asm.mplstyle /home/jovyan/.config/matplotlib/stylelib/asm.mplstyle
 
 ## Installing jupyter-vim-binding
 ## https://github.com/lambdalisue/jupyter-vim-binding
