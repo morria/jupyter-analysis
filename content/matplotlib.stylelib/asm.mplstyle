@@ -4,8 +4,7 @@ lines.markersize    : 1
 xtick.labelsize     : 10
 ytick.labelsize     : 10
 
-axes.prop_cycle     : cycler('color', ['3EB890','E8A727','70CADB','DF1765','1A937D','65863A','472A49','CC202
-7'])
+axes.prop_cycle     : cycler('color', ['3EB890','E8A727','70CADB','DF1765','1A937D','65863A','472A49','CC2027'])
 
 patch.facecolor     : ffffff
 
