@@ -19,6 +19,9 @@ USER $NB_USER
 # Upgrade Pandas
 RUN pip install --upgrade pandas
 
+# Matplotlib
+COPY content/matplotlib.stylelib/asm.mplstyle /home/jovyan/.config/matplotlib/stylelib
+
 ## Installing jupyter-vim-binding
 ## https://github.com/lambdalisue/jupyter-vim-binding
 RUN mkdir -p $(jupyter --data-dir)/nbextensions && \
@@ -90,5 +93,3 @@ ENV TOREE_OPTS $TOREE_OPTS --jars $SPARK_OPTS_JARS
 ENV SPARK_OPTS $SPARK_OPTS --jars $SPARK_OPTS_JARS
 
 # Reset the environment
-WORKDIR /home/jovyan
-USER $NB_USER
