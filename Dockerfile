@@ -16,6 +16,9 @@ RUN mkdir -p /usr/local/share/java
 WORKDIR /tmp/
 USER $NB_USER
 
+# Upgrade Pandas
+RUN pip install --upgrade pandas
+
 ## Installing jupyter-vim-binding
 ## https://github.com/lambdalisue/jupyter-vim-binding
 RUN mkdir -p $(jupyter --data-dir)/nbextensions && \
