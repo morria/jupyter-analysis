@@ -32,28 +32,34 @@ ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/jwnl.jar
 ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/jwnl.jar
 
 # OpenNLP
-USER root
 ADD http://www-us.apache.org/dist/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz apache-opennlp-1.5.3-bin.tar.gz
 RUN tar -zxf apache-opennlp-1.5.3-bin.tar.gz ;\
     cd apache-opennlp-1.5.3; \
     cp lib/*.jar /usr/local/share/java/; \
     cp lib/opennlp-tools-1.5.3.jar /usr/local/share/java/opennlp-tools-1.5.0.jar; \
     cd .. ; rm -rf apache-opennlp*
-USER $NB_USER
 ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/opennlp-maxent-3.0.3.jar,/usr/local/share/java/opennlp-tools-1.5.3.jar,/usr/local/share/java/opennlp-uima-1.5.3.jar
 ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/opennlp-maxent-3.0.3.jar:/usr/local/share/java/opennlp-tools-1.5.3.jar:/usr/local/share/java/opennlp-uima-1.5.3.jar
+
+# Graphviz
+RUN apt-get -y install graphviz
+
+
+USER $NB_USER
+
+
+# Graphviz
+RUN pip install graphviz
+RUN pip install nxpd
+
+# Upgrade Pandas
+RUN pip install --upgrade pandas
 
 # Tensor Flow
 RUN yes y | conda create -n tensorflow
 RUN /bin/bash -c "source activate tensorflow"
 RUN pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl
 
-
-USER $NB_USER
-
-
-# Upgrade Pandas
-RUN pip install --upgrade pandas
 
 # Matplotlib
 COPY content/matplotlib.stylelib/asm.mplstyle /home/jovyan/.config/matplotlib/stylelib/asm.mplstyle
