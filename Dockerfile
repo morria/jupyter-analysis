@@ -1,5 +1,5 @@
 FROM jupyter/all-spark-notebook
-MAINTAINER Andrew S. Morrison "asm@collapse.io"
+MAINTAINER Andrew S. Morrison "asm@trapezoid.work"
 
 # Similar work here:
 # https://github.com/boechat107/ext-spark-notebook/blob/master/Dockerfile#L34
@@ -32,14 +32,14 @@ ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/jwnl.jar
 ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/jwnl.jar
 
 # OpenNLP
-ADD http://www-us.apache.org/dist/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz apache-opennlp-1.5.3-bin.tar.gz
-RUN tar -zxf apache-opennlp-1.5.3-bin.tar.gz ;\
-    cd apache-opennlp-1.5.3; \
-    cp lib/*.jar /usr/local/share/java/; \
-    cp lib/opennlp-tools-1.5.3.jar /usr/local/share/java/opennlp-tools-1.5.0.jar; \
-    cd .. ; rm -rf apache-opennlp*
-ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/opennlp-maxent-3.0.3.jar,/usr/local/share/java/opennlp-tools-1.5.3.jar,/usr/local/share/java/opennlp-uima-1.5.3.jar
-ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/opennlp-maxent-3.0.3.jar:/usr/local/share/java/opennlp-tools-1.5.3.jar:/usr/local/share/java/opennlp-uima-1.5.3.jar
+# ADD http://www-us.apache.org/dist/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz apache-opennlp-1.5.3-bin.tar.gz
+# RUN tar -zxf apache-opennlp-1.5.3-bin.tar.gz ;\
+#     cd apache-opennlp-1.5.3; \
+#     cp lib/*.jar /usr/local/share/java/; \
+#     cp lib/opennlp-tools-1.5.3.jar /usr/local/share/java/opennlp-tools-1.5.0.jar; \
+#     cd .. ; rm -rf apache-opennlp*
+# ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/opennlp-maxent-3.0.3.jar,/usr/local/share/java/opennlp-tools-1.5.3.jar,/usr/local/share/java/opennlp-uima-1.5.3.jar
+# ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/opennlp-maxent-3.0.3.jar:/usr/local/share/java/opennlp-tools-1.5.3.jar:/usr/local/share/java/opennlp-uima-1.5.3.jar
 
 # Graphviz
 RUN apt-get -y install graphviz
@@ -56,9 +56,9 @@ RUN pip install nxpd
 RUN pip install --upgrade pandas
 
 # Tensor Flow
-RUN yes y | conda create -n tensorflow
-RUN /bin/bash -c "source activate tensorflow"
-RUN pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl
+# RUN yes y | conda create -n tensorflow
+# RUN /bin/bash -c "source activate tensorflow"
+# RUN pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl
 
 
 # Matplotlib
@@ -75,9 +75,10 @@ RUN pip install bash_kernel
 RUN python -m bash_kernel.install
 
 # Scala
-RUN curl -O https://raw.githubusercontent.com/alexarchambault/jupyter-scala/master/jupyter-scala
-RUN chmod +x ./jupyter-scala
-RUN ./jupyter-scala
+RUN curl -Lo coursier https://git.io/coursier-cli
+RUN chmod +x coursier
+RUN ./coursier launch --fork almond -- --install
+RUN rm -f coursier
 
 ENV TOREE_OPTS $TOREE_OPTS --jars $SPARK_OPTS_JARS
 ENV SPARK_OPTS $SPARK_OPTS --jars $SPARK_OPTS_JARS
