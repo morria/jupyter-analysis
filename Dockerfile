@@ -7,9 +7,7 @@ MAINTAINER Andrew S. Morrison "asm@trapezoid.work"
 # Discussion of SPARK_OPTS:
 # https://github.com/jupyter/docker-stacks/issues/169
 
-
 USER root
-
 
 # Set up the environment
 ENV DEBIAN_FRONTEND noninteractive
@@ -44,9 +42,7 @@ ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/jwnl.jar
 # Graphviz
 RUN apt-get -y install graphviz
 
-
 USER $NB_USER
-
 
 # Graphviz
 RUN pip install graphviz

@@ -6,7 +6,3 @@ sudo docker run -it --rm -p 8888:8888 \
     -v /home/asm/Documents/JupyterData/:/home/jovyan/work \
     --name jupyter-analysis \
     morria/jupyter:latest
-
-#    -w /home/asm \
-#    -e NB_USER=asm \
-#    -e CHOWN_HOME=yes \
