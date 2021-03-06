@@ -16,6 +16,13 @@ RUN apt-get -y install git curl
 RUN mkdir -p /usr/local/share/java
 WORKDIR /tmp/
 
+
+# Jupyter Config
+COPY content/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
+COPY content/jupyter_notebook_config.json /home/jovyan/.jupyter/jupyter_notebook_config.json
+RUN chown $NB_USER /home/jovyan/.jupyter/jupyter_notebook_config.py
+RUN chown $NB_USER /home/jovyan/.jupyter/jupyter_notebook_config.json
+
 # NTLK
 RUN pip install nltk
 
@@ -78,6 +85,7 @@ RUN rm -f coursier
 
 ENV TOREE_OPTS $TOREE_OPTS --jars $SPARK_OPTS_JARS
 ENV SPARK_OPTS $SPARK_OPTS --jars $SPARK_OPTS_JARS
+
 
 # Reset the environment
 WORKDIR /home/jovyan
