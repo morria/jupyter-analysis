@@ -36,6 +36,14 @@ RUN unzip jwnl14-rc2.zip; cd jwnl14-rc2; \
 ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/jwnl.jar
 ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/jwnl.jar
 
+# GNUPlot
+RUN apt-get -y install gnuplot
+
+# Mariadb
+RUN apt-get -y install mariadb-server mariadb-client
+RUN systemctl enable mariadb
+
+
 # OpenNLP
 # ADD http://www-us.apache.org/dist/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz apache-opennlp-1.5.3-bin.tar.gz
 # RUN tar -zxf apache-opennlp-1.5.3-bin.tar.gz ;\
@@ -55,6 +63,10 @@ USER $NB_USER
 RUN pip install graphviz
 RUN pip install nxpd
 
+# GNUPlot
+RUN pip install gnuplot_kernel
+RUN python -m gnuplot_kernel install --user
+
 # Upgrade Pandas
 RUN pip install --upgrade pandas
 
@@ -62,7 +74,6 @@ RUN pip install --upgrade pandas
 # RUN yes y | conda create -n tensorflow
 # RUN /bin/bash -c "source activate tensorflow"
 # RUN pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl
-
 
 # Matplotlib
 COPY content/matplotlib.stylelib/asm.mplstyle /home/jovyan/.config/matplotlib/stylelib/asm.mplstyle
@@ -86,6 +97,9 @@ RUN rm -f coursier
 ENV TOREE_OPTS $TOREE_OPTS --jars $SPARK_OPTS_JARS
 ENV SPARK_OPTS $SPARK_OPTS --jars $SPARK_OPTS_JARS
 
+# Mariadb
+RUN python3 -m pip install mariadb_kernel
+RUN python3 -m mariadb_kernel.install
 
 # Reset the environment
 WORKDIR /home/jovyan
