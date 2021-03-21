@@ -11,7 +11,7 @@ USER root
 
 # Set up the environment
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update; apt-get -y upgrade; apt-get -y autoclean
+RUN apt-get update --fix-missing; apt-get -y upgrade; apt-get -y autoclean
 RUN apt-get -y install git curl
 RUN mkdir -p /usr/local/share/java
 WORKDIR /tmp/
