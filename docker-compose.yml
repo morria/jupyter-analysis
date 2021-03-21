@@ -1,0 +1,22 @@
+version: "3.3"
+
+services:
+    jupyter:
+        image: "morria/jupyter:latest"
+        container_name: "jupyter"
+        restart: "unless-stopped"
+        user: "1000"
+        ports:
+            - "8889:8888"
+        volumes:
+            - "/home/asm/d/JupyterData/:/home/jovyan/work"
+        environment:
+            VIRTUAL_HOST: "jupyter.lepton.work"
+            VIRTUAL_PORT: 8889
+            LETSENCRYPT_HOST: "jupyter.lepton.work"
+            GRANT_SUDO: "yes"
+        networks: ["server"]
+
+networks:
+   server:
+       external: true
