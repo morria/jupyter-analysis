@@ -11,11 +11,22 @@ USER root
 
 # Set up the environment
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update --fix-missing; apt-get -y upgrade; apt-get -y autoclean
+RUN apt-get update --fix-missing;
+RUN apt-get -y upgrade;
+RUN apt-get -y autoclean
+
 RUN apt-get -y install git curl
 RUN mkdir -p /usr/local/share/java
-WORKDIR /tmp/
 
+# GNUPlot
+RUN apt-get -y install gnuplot
+
+# Mariadb
+RUN apt-get -y install mariadb-server mariadb-client
+RUN systemctl enable mariadb
+
+
+WORKDIR /tmp/
 
 # Jupyter Config
 COPY content/jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
@@ -35,13 +46,6 @@ RUN unzip jwnl14-rc2.zip; cd jwnl14-rc2; \
     cd ..; rm -rf jwnl*
 ENV SPARK_OPTS_JARS $SPARK_OPTS_JARS,/usr/local/share/java/jwnl.jar
 ENV SPARK_CLASSPATH $SPARK_CLASSPATH:/usr/local/share/java/jwnl.jar
-
-# GNUPlot
-RUN apt-get -y install gnuplot
-
-# Mariadb
-RUN apt-get -y install mariadb-server mariadb-client
-RUN systemctl enable mariadb
 
 
 # OpenNLP
@@ -100,6 +104,9 @@ ENV SPARK_OPTS $SPARK_OPTS --jars $SPARK_OPTS_JARS
 # Mariadb
 RUN python3 -m pip install mariadb_kernel
 RUN python3 -m mariadb_kernel.install
+
+#PyTorch
+RUN python3 -m pip install torch==1.8.1+cpu torchvision==0.9.1+cpu torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
 
 # Reset the environment
 WORKDIR /home/jovyan
